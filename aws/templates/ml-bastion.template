@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create a bastion host in a subnet
+Parameters:
+  VPC:
+    Type: 'AWS::EC2::VPC::Id'
+  Subnet:
+    Type: 'AWS::EC2::Subnet::Id'
+  SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup::Id'
+  KeyName:
+    Description: Name of and existing EC2 KeyPair to enable SSH access to the instance.
+    Type: String
+Resources:
+  BastionHost:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-d0ff67a8
+      KeyName: !Ref KeyName
+      # SecurityGroupIds:
+      #   - !Ref SecurityGroup
+      # SubnetId: !Ref Subnet
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - !Ref SecurityGroup
+          SubnetId: !Ref Subnet
